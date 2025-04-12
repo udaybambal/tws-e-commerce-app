@@ -1,31 +1,34 @@
-EasyShop is a modern, full-stack e-commerce platform built with Next.js 14, TypeScript, and MongoDB. It features a beautiful UI with Tailwind CSS, secure authentication, real-time cart updates, and a seamless shopping experience.
+**EasyShop is a modern, full-stack e-commerce platform built with Next.js 14, TypeScript, and MongoDB. It features a beautiful UI with Tailwind CSS, secure authentication, real-time cart updates, and a seamless shopping experience.**
 
 ## PreRequisites
 Before you begin setting up this project, make sure the following tools are installed and configured properly on your system:
 ### 1. Install Terraform
-Terraform is an open-source infrastructure as code (IaC) tool used for provisioning and managing cloud resources.
-Setup & Initialization
-Install Terraform
+**Setup & Initialization** <br/>
+* Install Terraform<br/>
 #### Linux & macOS
+```bash
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update && sudo apt-get install terraform
-
+```
 ### Verify Installation
+```bash
 terraform -v
-
+```
 ### Initialize Terraform
+```bash
 terraform init
-
+```
 ## 2. Install AWS CLI
 AWS CLI (Command Line Interface) allows you to interact with AWS services directly from the command line.
 #### aws configure
-This will prompt you to enter:
-#### **AWS Access Key ID**
-#### **AWS Secret Access Key**
-#### **Default region name**
-#### **Default output format**
+This will prompt you to enter:<br/>
+**AWS Access Key ID**<br/>
+**AWS Secret Access Key**<br/>
+**Default region name**<br/>
+**Default output format**<br/>
 **Note:** Make sure the IAM user you're using has the necessary permissions. You’ll need an AWS IAM Role with programmatic access enabled, along with the Access Key and Secret Key.
+
 ##### Role: Access Key & Secret Key
 ## Getting Started
 Follow the steps below to get your infrastructure up and running using Terraform:<br/>
