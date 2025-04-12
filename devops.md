@@ -28,7 +28,7 @@ This will prompt you to enter:
 **Note:** Make sure the IAM user you're using has the necessary permissions. You’ll need an AWS IAM Role with programmatic access enabled, along with the Access Key and Secret Key.
 ##### Role: Access Key & Secret Key
 ## Getting Started
-Follow the steps below to get your infrastructure up and running using Terraform:
+Follow the steps below to get your infrastructure up and running using Terraform:<br/>
 1. Clone the Repository
 First, clone this repo to your local machine:<br/>
 ```bash
@@ -94,21 +94,22 @@ Search and install the following:<br/>
 **Pipeline View**
 
 4. Set Up Docker & GitHub Credentials in Jenkins (Global Credentials)<br/>
+<br/>
 GitHub Credentials:<br/>
 Go to:<br/>
 **Jenkins → Manage Jenkins → Credentials → (Global) → Add Credentials**
 Use:<br/>
 Kind: **Username with password or Personal Access Token**<br/>
-ID: **github-credentials**
+ID: **github-credentials**<br/>
 
 DockerHub Credentials:<br/>
 Go to the same Global Credentials section<br/>
 Use:<br/>
 Kind: **Username with password**<br/>
 ID: **docker-hub-credentials**<br/>
-Use these IDs in your Jenkins pipeline for secure access to GitHub and DockerHub.
+Use these IDs in your Jenkins pipeline for secure access to GitHub and DockerHub.<br/>
 
-5. Jenkins Shared Library Setup
+5. Jenkins Shared Library Setup<br/>
 Configure Trusted Pipeline Library:<br/>
 Go to:<br/>
 **Jenkins → Manage Jenkins → Configure System**<br/>
