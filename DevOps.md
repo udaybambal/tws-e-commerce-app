@@ -1,30 +1,47 @@
-##### **EasyShop 🛍️** is a modern, full-stack e-commerce platform built with Next.js 14, TypeScript, and MongoDB. It features a beautiful UI with Tailwind CSS, secure authentication, real-time cart updates, and a seamless shopping experience.
+# 🚀 **TWS-EasyShop - DevOps Mega Project**  
+A full-stack, modern e-commerce platform built with **Next.js 14**, **TypeScript**, and **MongoDB**.  
+🔹 Features: Tailwind CSS UI,  secure auth,  real-time cart updates, and a seamless shopping experience.
 
-## PreRequisites
+---
 
-> [!IMPORTANT]  
-> Before you begin setting up this project, make sure the following tools are installed and configured properly on your system:
+##  **Pre-Requisites**
 
-## Setup & Initialization <br/>
+>  **Important:**  
+> Make sure the following tools are installed on your system before starting the setup:
 
-### 1. Install Terraform
-* Install Terraform<br/>
-#### Linux & macOS
+- [Terraform](https://developer.hashicorp.com/terraform/downloads)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- SSH access (for EC2 & Bastion)
+- Git & GitHub account
+
+---
+
+##  **Setup & Initialization**
+
+<details>
+<summary> <strong>1. Install & Configure Terraform</strong></summary>
+
+####  For Linux & macOS:
 ```bash
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update && sudo apt-get install terraform
 ```
-### Verify Installation
+
+####  Verify Installation:
 ```bash
 terraform -v
 ```
-### Initialize Terraform
+
+####  Initialize Terraform:
 ```bash
 terraform init
 ```
-### 2. Install AWS CLI
-AWS CLI (Command Line Interface) allows you to interact with AWS services directly from the command line.
+</details>
+
+<details>
+<summary> <strong>2. Install & Configure AWS CLI</strong></summary>
 
 ```bash
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -33,246 +50,186 @@ unzip awscliv2.zip
 sudo ./aws/install
 ```
 
- ```aws configure```
+####  Configure AWS CLI:
+```bash
+aws configure
+```
 
-> #### This will prompt you to enter:<br/>
-- **AWS Access Key ID:**<br/>
-- **AWS Secret Access Key:**<br/>
-- **Default region name:**<br/>
-- **Default output format:**<br/>
+> You'll be prompted for:
+> - **AWS Access Key ID**
+> - **AWS Secret Access Key**
+> - **Default Region**
+> - **Output Format**
 
-> [!NOTE] 
-> Make sure the IAM user you're using has the necessary permissions. You’ll need an AWS IAM Role with programmatic access enabled, along with the Access Key and Secret Key.
+>  **Note:** Ensure your IAM user has programmatic access and necessary permissions.
+</details>
 
-## Getting Started
+<details>
+<summary> <strong>3. Clone the Repository</strong></summary>
 
-> Follow the steps below to get your infrastructure up and running using Terraform:<br/>
-
-1. **Clone the Repository:**
-First, clone this repo to your local machine:<br/>
 ```bash
 git clone https://github.com/LondheShubham153/tws-e-commerce-app.git
 cd terraform
 ```
-2. **Generate SSH Key Pair:**
-Create a new SSH key to access your EC2 instance:
+</details>
+
+<details>
+<summary> <strong>4. Generate & Secure SSH Key</strong></summary>
+
 ```bash
 ssh-keygen -f terra-key
-```
-This will prompt you to create a new key file named terra-key.
-
-3. **Private key permission:** Change your private key permission:
-```bash
 chmod 400 terra-key
 ```
+</details>
 
-4. **Initialize Terraform:**
-Initialize the Terraform working directory to download required providers:
+<details>
+<summary> <strong>5. Deploy Infrastructure Using Terraform</strong></summary>
+
 ```bash
 terraform init
-```
-5. **Review the Execution Plan:**
-Before applying changes, always check the execution plan:
-```bash
 terraform plan
-```
-6. **Apply the Configuration:**
-Now, apply the changes and create the infrastructure:
-```bash
 terraform apply
 ```
-> Confirm with `yes` when prompted.
 
-7. **Access Your EC2 Instance;** <br/>
-After deployment, grab the public IP of your EC2 instance from the output or AWS Console, then connect using SSH:
+>  Confirm with `yes` when prompted.
+</details>
+
+<details>
+<summary> <strong>6. Connect to EC2 & Configure kubeconfig</strong></summary>
+
 ```bash
 ssh -i terra-key ubuntu@<public-ip>
 ```
 
-## Jenkins Setup Steps
-> [!TIP]
-> Check if jenkins service is running:
+####  Update kubeconfig:
+```bash
+aws configure
+aws eks --region eu-west-1 update-kubeconfig --name tws-eks-cluster
+kubectl get nodes
+```
+</details>
+
+---
+
+##  **Jenkins Setup**
+
+<details>
+<summary> <strong>Check & Start Jenkins</strong></summary>
 
 ```bash
 sudo systemctl status jenkins
+sudo systemctl enable jenkins
+sudo systemctl restart jenkins
 ```
-## Steps to Access Jenkins & Install Plugins
-1️. Open Jenkins in Browser
-Use your public IP with port 8080:
+</details>
 
-**http://<public_IP>:8080**
+<details>
+<summary> <strong>Access Jenkins & Install Plugins</strong></summary>
 
-2️. Start Jenkins (If Not Running)
-Start the service and get the Jenkins initial admin password:
+- Open: `http://<public_ip>:8080`
+- Get admin password:
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
-3️. Install Essential Plugins
-Navigate to:<br/>
-**Manage Jenkins → Plugins → Available Plugins**<br/>
-Search and install the following:<br/>
-**Docker Pipeline**<br/>
-**Pipeline View**
 
-4. Set Up Docker & GitHub Credentials in Jenkins (Global Credentials)<br/>
-<br/>
-GitHub Credentials:<br/>
-Go to:<br/>
-**Jenkins → Manage Jenkins → Credentials → (Global) → Add Credentials**
-Use:<br/>
-Kind: **Username with password or Personal Access Token**<br/>
-ID: **github-credentials**<br/>
+###  Recommended Plugins:
+- Docker Pipeline  
+- Pipeline View
+</details>
 
-DockerHub Credentials:<br/>
-Go to the same Global Credentials section<br/>
-Use:<br/>
-Kind: **Username with password**<br/>
-ID: **docker-hub-credentials**<br/>
-Use these IDs in your Jenkins pipeline for secure access to GitHub and DockerHub.<br/>
+<details>
+<summary> <strong>Set Up Jenkins Credentials</strong></summary>
 
-5. Jenkins Shared Library Setup<br/>
-Configure Trusted Pipeline Library:<br/>
-Go to:<br/>
-**Jenkins → Manage Jenkins → Configure System**<br/>
+- **GitHub:**  
+  - Kind: `Username with password / PAT`  
+  - ID: `github-credentials`
 
-Scroll to Global Pipeline Libraries section<br/>
+- **DockerHub:**  
+  - Kind: `Username with password`  
+  - ID: `docker-hub-credentials`
+</details>
 
-**Add a New Shared Library:** <br/>
-**Name:** shared<br/>
-**Default Version:** main<br/>
-**Project Repository URL:** URL of the shared library repo that the learner has forked.<br/>
-**Note:** Make sure the repo contains a proper directory structure like vars/, src/, and resources/<br/>
-	
-6. Setup Pipeline [New Item in Jenkins]<br/>
-Create New Pipeline Job<br/>
-**Name:** EasyShop<br/>
-**Type:** Pipeline<br/>
+<details>
+<summary> <strong>Configure Shared Library & Create Pipeline</strong></summary>
 
-**Configure GitHub Repository**<br/>
-**GitHub Repo URL:** Provide the learner’s forked repo URL<br/>
-**Branch:** main or master (as per the repo)<br/>
+- Go to **Jenkins → Manage Jenkins → Configure System**
+- Add **Global Pipeline Library**:
+  - Name: `shared`
+  - Repo: `https://github.com/<your-username>/jenkins-shared-libraries`
+  - Default Version: `main`
 
-**Fork Required Repos**<br/>
-Fork App Repo:<br/>
-* Open the Jenkinsfile<br/>
-* Change the DockerHub username to yours<br/>
+- Create a new pipeline job:
+  - Name: `EasyShop`
+  - Type: `Pipeline`
+  - Use GitHub hook trigger
+  - Script from SCM:
+    - Repo: `https://github.com/<your-username>/tws-e-commerce-app`
+    - Credentials: `github-credentials`
+    - Branch: `master`
+    - Script Path: `Jenkinsfile`
+</details>
 
-**Fork Shared Library Repo:**<br/>
-* Edit vars/update_k8s_manifest.groovy<br/>
-* Update with your DockerHub username<br/>
+<details>
+<summary> <strong>Set Up Webhook in GitHub</strong></summary>
 
-**Setup Webhook**<br/>
-In GitHub:<br/>
-* Go to **Settings → Webhooks**<br/>
-* Add a new webhook pointing to your Jenkins URL<br/>
-* Select: **"GitHub hook trigger for GITScm polling"** in Jenkins job<br/>
+- Go to: GitHub → Settings → Webhooks
+- URL: `http://<jenkins-ip>:8080/github-webhook/`
+- Enable: **"GitHub hook trigger for GITScm polling"** in Jenkins job
+</details>
 
-**Trigger the Pipeline**<br/>
-Click **'Build Now'** in Jenkins
+---
 
-**7. CD – Continuous Deployment Setup**<br/>
-**Prerequisites:**<br/>
-Before configuring CD, make sure the following tools are installed:<br/>
-* Installations Required:<br/>
-**kubectl**<br/>
-**AWS CLI**
+##  **Continuous Deployment with Argo CD**
 
-**SSH into Bastion Server**<br/>
-* Connect to your Bastion EC2 instance via SSH.
+<details>
+<summary> <strong>Install Argo CD</strong></summary>
 
-**Note:**<br/>
-This is not the node where Jenkins is running. This is the intermediate EC2 (Bastion Host) used for accessing private resources like your EKS cluster.
-
-**8. Configure AWS CLI on Bastion Server**
-Run the AWS configure command:<br/>
-```bash
-aws configure
-```
-Add your Access Key and Secret Key when prompted.
-
-**9. Update Kubeconfig for EKS**<br/>
-Run the following important command:
-```bash
-aws eks update-kubeconfig --region eu-west-1 --name tws-eks-cluster
-```
-* This command maps your EKS cluster with your Bastion server.
-* It helps to communicate with EKS components.
-
-**10. Argo CD Setup**<br/>
-Create a Namespace for Argo CD<br/>
 ```bash
 kubectl create namespace argocd
-```
-1. Install Argo CD using Manifest
-```bash
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-2. Watch Pod Creation
-```bash
 watch kubectl get pods -n argocd
 ```
-3. This helps monitor when all Argo CD pods are up and running.<br/>
+</details>
 
-4. Check Argo CD Services
-```bash
-kubectl get svc -n argocd
-```
+<details>
+<summary> <strong>Access Argo CD GUI</strong></summary>
 
-5. Change Argo CD Server Service to NodePort
 ```bash
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
-```
-
-11. Access Argo CD GUI<br/>
-Check Argo CD Server Port (again, post NodePort change)<br/>
-```bash
-kubectl get svc -n argocd
-```
-1. Port Forward to Access Argo CD in Browser<br/>
- Forward Argo CD service to access the GUI:
-```bash
 kubectl port-forward svc/argocd-server -n argocd <your-port>:443 --address=0.0.0.0 &
 ```
-2. Replace <your-port> with a local port of your choice (e.g., 8080).<br/>
- Now, open https://<bastion-ip>:<your-port> in your browser.
 
+Open in browser:  
+`https://<bastion-ip>:<your-port>`
 
-Get the Argo CD Admin Password<br/>
+ Get login password:
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
-1. Log in to the Argo CD GUI
-* Username: admin
-* Password: (Use the decoded password from the previous command)
 
-2. Update Your Password
-* On the left panel of Argo CD GUI, click on "User Info"
-* Select Update Password and change it.
+Login:  
+- Username: `admin`  
+- Password: *(use decoded output)*
+</details>
 
-**Deploy Your Application in Argo CD GUI**<br/>
-1. On the Argo CD homepage, click on the “New App” button.<br/>
-2. Fill in the following details:<br/>
-* Application Name:<br/>
- [Enter your desired app name]<br/>
+<details>
+<summary> <strong>Deploy App in Argo CD</strong></summary>
 
-* **Project Name:** <br/>
- Select 'default' from the dropdown.<br/>
-* **Sync Policy:** <br/>
- Choose 'Automatic'.<br/>
+- Click `New App` in Argo CD UI  
+- Fill in the following:
+  - App Name: `easyshop` (or your preferred)
+  - Repo URL: *Your GitHub repo with K8s manifests*
+  - Path: `/kubernetes`
+  - Cluster URL: `https://kubernetes.default.svc`
+  - Namespace: `tws-e-commerce-app`
+  - Sync Policy: `Automatic`
 
-3. In the “Source” section:<br/>
-***Repo URL:** <br/>
- Add the Git repository URL that contains your Kubernetes manifests.<br/>
-***Path:** <br/>
- Kubernetes (or the actual path inside the repo where your manifests reside)<br/>
+>  Click **Create**
+</details>
 
-4. In the “Destination” section:
-* **Cluster URL:** <br/>
- https://kubernetes.default.svc (usually shown as "default")
-* **Namespace:** <br/>
- tws-e-commerce-app (or your desired namespace)<br/>
+---
 
-5. Click on “Create”.
+##  **Congratulations!**  
+Your **EasyShop** infrastructure is now fully operational with automated CI/CD using **Jenkins**, **Terraform**, and **Argo CD**.  
+Happy shipping! 
 
-## **Congratulations!** <br/>
-### Your project is now deployed via Argo CD 
