@@ -1,18 +1,18 @@
 
-# 🛍️ **EasyShop** – Modern E-commerce Platform
+#  **EasyShop** – Modern E-commerce Platform
 
 **EasyShop** is a **full-stack e-commerce platform** built with:
 
-- ⚡ **Next.js 14**
-- 🛠️ **TypeScript**
-- 🗄️ **MongoDB**
-- 🎨 **Tailwind CSS** for UI
-- 🔐 Secure Authentication
-- 🛒 Real-time Cart Updates
+-  **Next.js 14**
+-  **TypeScript**
+-  **MongoDB**
+-  **Tailwind CSS** for UI
+-  Secure Authentication
+-  Real-time Cart Updates
 
 ---
 
-## 🚀 Prerequisites
+##  Prerequisites
 
 > [!IMPORTANT]  
 > Ensure these tools are installed & configured before proceeding:
@@ -26,10 +26,10 @@
 
 ---
 
-## ⚙️ Project Setup & Initialization
+##  Project Setup & Initialization
 
 <details>
-<summary><strong>1️⃣ Install & Initialize Terraform</strong></summary>
+<summary><strong> Install & Initialize Terraform</strong></summary>
 
 ```bash
 # Add HashiCorp repo & install
@@ -38,12 +38,12 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt-get update && sudo apt-get install terraform
 ```
 
-✅ Verify:
+ Verify:
 ```bash
 terraform -v
 ```
 
-🚀 Initialize:
+ Initialize:
 ```bash
 terraform init
 ```
@@ -51,7 +51,7 @@ terraform init
 </details>
 
 <details>
-<summary><strong>2️⃣ Install & Configure AWS CLI</strong></summary>
+<summary><strong> Install & Configure AWS CLI</strong></summary>
 
 ```bash
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -61,7 +61,7 @@ sudo ./aws/install
 aws configure
 ```
 
-🔐 Provide:
+ Provide:
 - **AWS Access Key ID**
 - **AWS Secret Access Key**
 - **Default region name**
@@ -74,38 +74,38 @@ aws configure
 
 ---
 
-## 🚀 Getting Started with Terraform
+##  Getting Started with Terraform
 
 <details>
 <summary><strong>Step-by-step Deployment</strong></summary>
 
-### 🔁 Clone the Repository
+### Clone the Repository
 ```bash
 git clone https://github.com/LondheShubham153/tws-e-commerce-app.git
 cd terraform
 ```
 
-### 🔐 Generate SSH Key
+###  Generate SSH Key
 ```bash
 ssh-keygen -f terra-key
 chmod 400 terra-key
 ```
 
-### 🧱 Infrastructure Setup
+###  Infrastructure Setup
 ```bash
 terraform init
 terraform plan
 terraform apply
 ```
 
-> ✅ Confirm with `yes`
+>  Confirm with `yes`
 
-### 🔗 SSH into EC2
+###  SSH into EC2
 ```bash
 ssh -i terra-key ubuntu@<public-ip>
 ```
 
-### ☸️ Update Kubeconfig
+###  Update Kubeconfig
 ```bash
 aws eks --region eu-west-1 update-kubeconfig --name tws-eks-cluster
 kubectl get nodes
@@ -115,28 +115,28 @@ kubectl get nodes
 
 ---
 
-## 🧰 Jenkins Setup
+##  Jenkins Setup
 
 <details>
 <summary><strong>Jenkins Access & Plugin Setup</strong></summary>
 
-### 📡 Check Jenkins Status
+###  Check Jenkins Status
 ```bash
 sudo systemctl status jenkins
 ```
 
-### 🔑 Get Initial Admin Password
+###  Get Initial Admin Password
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-### ⚙️ Start Jenkins (If not running)
+###  Start Jenkins (If not running)
 ```bash
 sudo systemctl enable jenkins
 sudo systemctl restart jenkins
 ```
 
-### 🔌 Install Plugins
+###  Install Plugins
 Go to:  
 **Manage Jenkins → Plugins → Available Plugins**
 
@@ -147,7 +147,7 @@ Install:
 </details>
 
 <details>
-<summary><strong>🔐 Jenkins Credentials Setup</strong></summary>
+<summary><strong> Jenkins Credentials Setup</strong></summary>
 
 ### GitHub Credentials:
 > Jenkins → Manage Jenkins → Credentials → Global → Add Credentials
@@ -161,7 +161,7 @@ Install:
 </details>
 
 <details>
-<summary><strong>📦 Jenkins Shared Library</strong></summary>
+<summary><strong> Jenkins Shared Library</strong></summary>
 
 ### Add Shared Library
 > Manage Jenkins → Configure System → Global Pipeline Libraries
@@ -170,11 +170,11 @@ Install:
 - **Version:** `main`
 - **Repo URL:** `https://github.com/<your-user>/jenkins-shared-libraries`
 
-> 📁 Ensure repo has: `vars/` directory.
+>  Ensure repo has: `vars/` directory.
 </details>
 
 <details>
-<summary><strong>🔄 Pipeline Job Setup</strong></summary>
+<summary><strong> Pipeline Job Setup</strong></summary>
 
 - **Name:** `EasyShop`
 - **Type:** `Pipeline`
@@ -193,10 +193,10 @@ Install:
 
 ---
 
-## 🚀 Continuous Deployment Setup (CD)
+##  Continuous Deployment Setup (CD)
 
 <details>
-<summary><strong>🔐 Bastion Host + AWS CLI</strong></summary>
+<summary><strong> Bastion Host + AWS CLI</strong></summary>
 
 ### SSH into Bastion
 ```bash
@@ -217,29 +217,29 @@ aws eks update-kubeconfig --region eu-west-1 --name tws-eks-cluster
 
 ---
 
-## 🚀 Argo CD Setup
+##  Argo CD Setup
 
 <details>
-<summary><strong>🌐 Argo CD Installation & Access</strong></summary>
+<summary><strong> Argo CD Installation & Access</strong></summary>
 
-### 📦 Install Argo CD
+###  Install Argo CD
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-### 📊 Monitor Pods
+###  Monitor Pods
 ```bash
 watch kubectl get pods -n argocd
 ```
 
-### 🌍 Expose Argo CD
+###  Expose Argo CD
 ```bash
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 kubectl port-forward svc/argocd-server -n argocd 8080:443 --address=0.0.0.0 &
 ```
 
-> 🔑 Get admin password:
+>  Get admin password:
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
@@ -248,12 +248,12 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 ---
 
-## 🌐 Ingress Controller + HTTPS
+## Ingress Controller + HTTPS
 
 <details>
-<summary><strong>🔐 NGINX Ingress + Cert-Manager</strong></summary>
+<summary><strong> NGINX Ingress + Cert-Manager</strong></summary>
 
-### 📥 NGINX Installation
+###  NGINX Installation
 ```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
@@ -262,7 +262,7 @@ kubectl create namespace ingress-nginx
 helm install nginx-ingress ingress-nginx/ingress-nginx   --namespace ingress-nginx   --set controller.service.type=LoadBalancer
 ```
 
-### 📥 Cert-Manager Setup
+###  Cert-Manager Setup
 ```bash
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
@@ -274,32 +274,32 @@ helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --c
 
 ---
 
-## 🔒 HTTPS Configuration
+##  HTTPS Configuration
 
 <details>
 <summary><strong>🔧 Update Manifests for HTTPS</strong></summary>
 
-#### 📄 `04-configmap.yaml`
+####  `04-configmap.yaml`
 ```yaml
 NEXT_PUBLIC_API_URL: "https://easyshop.letsdeployit.com/api"
 NEXTAUTH_URL: "https://easyshop.letsdeployit.com/"
 ```
 
-#### 📄 `10-ingress.yaml`
+####  `10-ingress.yaml`
 ```yaml
 annotations:
   cert-manager.io/cluster-issuer: "letsencrypt-prod"
   nginx.ingress.kubernetes.io/ssl-redirect: "true"
 ```
 
-🔁 Apply Changes:
+ Apply Changes:
 ```bash
 kubectl apply -f 00-cluster-issuer.yaml
 kubectl apply -f 04-configmap.yaml
 kubectl apply -f 10-ingress.yaml
 ```
 
-🔍 Check Status:
+ Check Status:
 ```bash
 kubectl get certificate -n easyshop
 kubectl describe certificate easyshop-tls -n easyshop
@@ -309,8 +309,8 @@ kubectl describe certificate easyshop-tls -n easyshop
 
 ---
 
-## ✅ **Congratulations! Deployment Complete!**
+##  **Congratulations! Deployment Complete!**
 
 ![EasyShop Website Screenshot](./public/Deployed.png)
 
-> 🎉 Your full-stack e-commerce project is now deployed and live!
+>  Your full-stack e-commerce project is now deployed and live!
