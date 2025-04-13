@@ -9,7 +9,7 @@ pipeline {
         DOCKER_MIGRATION_IMAGE_NAME = 'trainwithshubham/easyshop-migration'
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        GIT_BRANCH = "tf-DevOps"
+        GIT_BRANCH = "master"
     }
     
     stages {
@@ -118,17 +118,6 @@ pipeline {
                         gitUserEmail: 'shubhamnath5@gmail.com'
                     )
                 }
-            }
-        }
-    }
-    
-    post {
-        always {
-            script {
-                archiveArtifacts artifacts: '*.xml', followSymlinks: false
-                build job: "EasyShop", parameters: [
-                string(name: 'DOCKER_TAG', value: env.DOCKER_IMAGE_TAG)
-            ]
             }
         }
     }
