@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.67.0"  # Pinned to work with your modules
+    }
+  }
+}
+
 locals {
 
   region          = "eu-west-1"
