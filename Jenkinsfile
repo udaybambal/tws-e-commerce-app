@@ -26,7 +26,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    clone("https://github.com/udaybambal/tws-e-commerce-app.git","master")
+                    clone(env.GIT_REPO,env.GIT_BRANCH)
                 }
             }
         }
